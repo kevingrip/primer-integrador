@@ -71,6 +71,7 @@ class ProductManager {
         if (deleteProduct){
             const filteredProduct = this.products.filter(product => product.id != id);
             await fs.promises.writeFile(this.path,JSON.stringify(filteredProduct),'utf-8')
+            console.log("Producto borrado ID: "+id)
             return ("Producto borrado ID: "+id)
         }else{
             return ("ID no encontrado")

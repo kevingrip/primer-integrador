@@ -21,23 +21,33 @@ productRoutes.get('/:pid', async(req,res) => {
 })
 
 productRoutes.post('/', uploader.single('thumbnail'), async(req,res) => {
+    const socketServer = req.app.get('socketServer');
+
     console.log(req.file);
     console.log(req.body);
     const title = req.body.title;
     const description = req.body.description;
     const price = parseInt(req.body.price);
-    const thumbnail = `${config.DIRNAME}public/img/${req.file.originalname}`
+    const thumbnail = `/static/img/${req.file.originalname}`
     const code = req.body.code;
     const stock = parseInt(req.body.stock);
     // console.log(`${config.DIRNAME}public/img/${req.file.originalname}`)
     await manager.addProduct(title, description, price, thumbnail,code,stock);
     res.status(200).send({ status:3, payload: req.body });
+
+    socketServer.emit('newProduct', "Producto agregado");
+
 })
 
 productRoutes.delete('/:pid',async(req,res) => {
+    const socketServer = req.app.get('socketServer');
+
     const productId = parseInt(req.params.pid);
-    const deleteProduct = await manager.deleteProductId(productId)
-    res.status(200).send({ status: 4, payload: deleteProduct})
+    const deleteProduct = await manager.deleteProductId(productId)    
+    res.status(200).send({ status: 4, payload: deleteProduct})    
+
+    socketServer.emit('deleteProduct', "Producto borrado")
+
 })
 
 productRoutes.put('/:id', uploader.single('thumbnail'),async(req,res) => {
@@ -46,6 +56,7 @@ productRoutes.put('/:id', uploader.single('thumbnail'),async(req,res) => {
     update.id = productId
     await manager.updateProduct(update)
     res.status(200).send({ status: 5, payload: update})
+
 })
 
 
