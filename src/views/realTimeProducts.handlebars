@@ -15,14 +15,15 @@
             </div>
         {{/each}}
     </div> --}}
+    
     <ul id="productsList" class="list-group" method="delete" enctype="multipart/form-data">
-        {{#each products}}
+        {{#each productConIdStrings}}
         <li style="margin-bottom: 40px;">
             <img src="{{thumbnail}}" style="width: 10rem; height:100px;" alt="">
             <h4>{{title}}</h4>
             <p>{{description}}</p>
             <p>$ {{price}}</p>            
-            <button type="button" class="btn btn-danger" style="width: 5rem; height: 2rem;" onclick="handleDeleteButtonClick('{{id}}')">Delete</button>
+            <button type="button" class="btn btn-danger" style="width: 5rem; height: 2rem;" onclick="handleDeleteButtonClick('{{_id}}')">Delete</button>
         </li>
         {{/each}}
     </ul>

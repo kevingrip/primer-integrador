@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { uploader } from "../uploader.js";
 import CartManager from "../dao/cartManager.js";
 import CartCollectionManager from "../dao/cartManagerMdb.js";
 
@@ -29,13 +28,13 @@ cartRoutes.get('/:cid', async(req,res) => {
     
 })
 
-cartRoutes.post('/', uploader.single(), async(req,res) => {
+cartRoutes.post('/', async(req,res) => {
     console.log(req.body);
     const cartEmpty = await dbCartManager.addEmptyCart();
     res.status(200).send({ status:3, payload: cartEmpty });
 })
 
-cartRoutes.post('/:cid/product/:pid', uploader.single(), async(req,res) => {
+cartRoutes.post('/:cid/product/:pid', async(req,res) => {
     // console.log(req.body);
 
     // const cartId = parseInt(req.params.cid);

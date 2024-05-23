@@ -46,7 +46,7 @@ class CartCollectionManager {
         try {
             const cartProduct = await cartModel.findById(cartId)
 
-            console.log(productId)
+            console.log(cartProduct)
 
             if (cartProduct){
 

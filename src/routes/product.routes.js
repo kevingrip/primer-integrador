@@ -73,10 +73,10 @@ productRoutes.delete('/:pid',async(req,res) => {
 productRoutes.put('/:pid', uploader.single('thumbnail'),async(req,res) => {
     const productId = req.params.pid;
     const update = req.body
-    update.id = productId
+    update.idMdb = productId
     // await manager.updateProduct(update)
     // res.status(200).send({ status: 5, payload: update})
-
+    console.log(update)
     const updateProductsFromDb = await dbManager.updateProductDB(update)
     res.status(200).send({ status: 5, payload: updateProductsFromDb})
 

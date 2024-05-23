@@ -1,6 +1,7 @@
 import { Router } from "express";
 import ProductManager from "../dao/productManager.js";
 import ProductCollectionManager from "../dao/ProductManagerMdb.js";
+import productModel from "../dao/models/product.model.js";
 
 const viewsRouter = Router();
 
@@ -16,17 +17,37 @@ viewsRouter.get('/bienvenida', (req,res)=>{
 
 viewsRouter.get('/realtimeproducts',async (req,res)=>{
     const products = await dbManager.getAllProductsDB()
-    res.render('realTimeProducts', {products})
+    const productConIdStrings = products.map(item => {
+        return {
+            ...item,
+            _id: item._id.toString()
+        };
+    });
+    res.render('realTimeProducts', {productConIdStrings})
 })
 
 viewsRouter.post('/realtimeproducts',async (req,res)=>{
     const products = await dbManager.getAllProductsDB()
-    res.render('realTimeProducts', {products})
+    const productConIdStrings = products.map(item => {
+        return {
+            ...item,
+            _id: item._id.toString()
+        };
+    });
+    res.render('realTimeProducts', {productConIdStrings})
 })
 
 viewsRouter.get('/home',async (req,res)=>{
-    const products = await manager.getProducts()
-    res.render('home', {products})
+    const products = await dbManager.getAllProductsDB()
+    const productConIdStrings = products.map(item => {
+        return {
+            ...item,
+            _id: item._id.toString()
+        };
+    });
+
+    console.log(productConIdStrings);
+    res.render('home', {productConIdStrings})
 })
 
 viewsRouter.get('/chat',(req,res)=>{

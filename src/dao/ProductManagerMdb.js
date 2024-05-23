@@ -6,7 +6,7 @@ class ProductCollectionManager {
 
     getAllProductsDB = async (limit) => {
         try {
-            const products = await productModel.find()
+            const products = await productModel.find().lean()
             console.log(products)
             return limit === 0 ? products : products.slice(0,limit);
             //corregir limit
@@ -68,7 +68,7 @@ class ProductCollectionManager {
 
     updateProductDB = async (upd) => {
         try {                        
-            const updatedProduct = await productModel.findByIdAndUpdate(upd.id, upd, { new: true });
+            const updatedProduct = await productModel.findByIdAndUpdate(upd.idMdb, upd, { new: true }).lean();
 
             if (!updatedProduct) {
                 return console.log("Producto no encontrado");
