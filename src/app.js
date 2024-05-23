@@ -8,6 +8,7 @@ import productRoutes from './routes/product.routes.js';
 import cartRoutes from './routes/cart.routes.js';
 import handlebars from 'express-handlebars';
 import viewsRouter from './routes/views.routes.js';
+import mongoose from 'mongoose';
 
 let messages = [];
 
@@ -26,7 +27,8 @@ app.use('/api/product',productRoutes);
 app.use('/api/cart',cartRoutes);
 app.use('/static',express.static(`${config.DIRNAME}/public`));
 
-const httpServer = app.listen(config.PORT, ()=>{
+const httpServer = app.listen(config.PORT, async ()=>{
+    await mongoose.connect(config.mongoDB_Atlas);
     console.log(`Servidor activo en puerto ${config.PORT}`);
     console.log(config.DIRNAME)
 });
