@@ -2,7 +2,6 @@ import { Router } from "express";
 import { uploader } from "../uploader.js";
 import ProductManager from "../productManager.js";
 import CollectionManager from "../dao/managermdb.js";
-import productModel from "../dao/models/product.model.js";
 
 const productRoutes = Router();
 
@@ -65,7 +64,7 @@ productRoutes.delete('/:pid',async(req,res) => {
     // const deleteProduct = await manager.deleteProductId(productId)    
     // res.status(200).send({ status: 4, payload: deleteProduct})    
 
-    const deleteProductsFromDb = await productModel.findByIdAndDelete(productId)    
+    const deleteProductsFromDb = await dbManager.deleteProductDB(productId)    
     res.status(200).send({ status: 4, payload: deleteProductsFromDb})    
 
     socketServer.emit('deleteProduct', "Producto borrado")

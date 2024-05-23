@@ -50,8 +50,6 @@ class CollectionManager {
                 }
             }     
 
-            await productModel.create(product);
-
             
         } catch (err) {
             return err.message;
@@ -73,8 +71,10 @@ class CollectionManager {
         };
     };
 
-    delete = async (idDelete) => {
+    deleteProductDB = async (idDelete) => {
         try {
+            console.log("Producto eliminado id:",idDelete)
+            return await productModel.findByIdAndDelete(idDelete)
         } catch (err) {
             return err.message;
         };
