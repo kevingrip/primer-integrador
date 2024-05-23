@@ -1,11 +1,13 @@
-import productModel from "../dao/models/product.model.js";
-class CollectionManager {
+import productModel from "./models/product.model.js";
+
+class ProductCollectionManager {
     constructor() {
     }
 
-    getAllProductsDb = async (limit) => {
+    getAllProductsDB = async (limit) => {
         try {
             const products = await productModel.find()
+            console.log(products)
             return limit === 0 ? products : products.slice(0,limit);
             //corregir limit
         } catch (err) {
@@ -13,7 +15,7 @@ class CollectionManager {
         };
     };
 
-    addProductDb = async (title,description,price,thumbnail,code,stock) => {
+    addProductDB = async (title,description,price,thumbnail,code,stock) => {
         try {
 
             const product = {
@@ -56,7 +58,7 @@ class CollectionManager {
         };
     };
 
-    getProductByIdDb = async (id) => {
+    getProductByIdDB = async (id) => {
         try {
             return await productModel.findById(id);
         } catch (err) {
@@ -64,8 +66,16 @@ class CollectionManager {
         };
     };
 
-    update = async (id, updProd) => {
-        try {
+    updateProductDB = async (upd) => {
+        try {                        
+            const updatedProduct = await productModel.findByIdAndUpdate(upd.id, upd, { new: true });
+
+            if (!updatedProduct) {
+                return console.log("Producto no encontrado");
+            } else{
+                return updatedProduct
+            }
+            
         } catch (err) {
             return err.message;
         };
@@ -81,4 +91,4 @@ class CollectionManager {
     };
 }
 
-export default CollectionManager;
+export default ProductCollectionManager;

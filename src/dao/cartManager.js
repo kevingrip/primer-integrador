@@ -15,7 +15,7 @@ class CartManager {
 
         
         if (this.productsCart.length === 0){
-            newCart.id=1;
+            newCart.idCart=1;
         }else{
             let mayorProdId=1;
             this.productsCart.forEach(product=>{
@@ -24,9 +24,9 @@ class CartManager {
                     mayorProdId=product.id;
                 }                        
             })
-            newCart.id=mayorProdId+1;
+            newCart.idCart=mayorProdId+1;
         }
-        newCart.products=[];
+        newCart.list=[];
 
         this.productsCart.push(newCart)
 
@@ -47,7 +47,7 @@ class CartManager {
     async getCartId(id){
         await this.getCart()
 
-        const cartId = this.productsCart.find(cartId => cartId.id === id)
+        const cartId = this.productsCart.find(cart => cart.idCart === id)
         if (cartId){
             return cartId
         }else {
@@ -55,25 +55,25 @@ class CartManager {
          }        
     }
 
-    async addProductCart(id,productId){
+    async addProductCart(cartId,productId){
 
-        const cartProduct = await this.getCartId(id);
+        const cartProduct = await this.getCartId(cartId);
 
         if (cartProduct){
 
-            const prod = cartProduct.products
+            const prodList = cartProduct.list
 
-            const prodFilter = prod.filter(prod => prod.product === productId)
+            const prodFilter = prodList.filter(prod => prod.idProduct === productId)
 
             // console.log('prodFilter',prodFilter)
 
             if (prodFilter.length>0){
-                prod.forEach(cart =>{ 
-                    if (cart.product === productId){
+                prodList.forEach(cart =>{ 
+                    if (cart.idProduct === productId){
                         cart.quantity+=1;
                     }})
             } else {
-                cartProduct.products.push({'product':productId, 'quantity':1})
+                cartProduct.list.push({'idProduct':productId, 'quantity':1})
             }
             
             await fs.promises.writeFile(this.path,JSON.stringify(this.productsCart),'utf-8')

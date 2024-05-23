@@ -20,7 +20,7 @@ const schema = new mongoose.Schema({
 
     status: {type: Boolean, required: true},
 
-    id: {type: String, required: true}
+    id: {type: Number, required: true}
 
 },{ versionKey: false });
 

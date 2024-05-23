@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { uploader } from "../uploader.js";
-import ProductManager from "../productManager.js";
-import CollectionManager from "../dao/managermdb.js";
+import ProductManager from "../dao/productManager.js";
+import ProductCollectionManager from "../dao/ProductManagerMdb.js";
 
 const productRoutes = Router();
 
 const productJson = './src/product.json'
 
 const manager = new ProductManager(productJson);
-const dbManager = new CollectionManager();
+const dbManager = new ProductCollectionManager();
 
 
 // productRoutes.get('/',async (req,res)=>{
@@ -19,7 +19,7 @@ const dbManager = new CollectionManager();
 
 productRoutes.get('/',async (req,res)=>{
     // const productsFromDb = await productModel.find();
-    const productsFromDb = await dbManager.getAllProductsDb()
+    const productsFromDb = await dbManager.getAllProductsDB()
     res.status(200).send({ status: 1, payload: productsFromDb})
 })
 
@@ -27,7 +27,7 @@ productRoutes.get('/:pid', async(req,res) => {
     const productId = req.params.pid;
     // const product = await manager.getProductsById(productId)
     // res.status(200).send({ status: 2, payload: product})
-    const productsFromDb = await dbManager.getProductByIdDb(productId);
+    const productsFromDb = await dbManager.getProductByIdDB(productId);
     res.status(200).send({ status: 2, payload: productsFromDb})
 
 })
@@ -43,11 +43,10 @@ productRoutes.post('/', uploader.single('thumbnail'), async(req,res) => {
     const thumbnail = `/static/img/${req.file.originalname}`
     const code = req.body.code;
     const stock = parseInt(req.body.stock);
-    // const id = "7"
-    // const status = req.body.status
+
     // console.log(`${config.DIRNAME}public/img/${req.file.originalname}`)
 
-    await dbManager.addProductDb(title, description, price, thumbnail,code,stock);
+    await dbManager.addProductDB(title, description, price, thumbnail,code,stock);
     res.status(200).send({ status:3, payload: req.body });
     socketServer.emit('newProduct', "Producto agregado");
         
@@ -71,12 +70,15 @@ productRoutes.delete('/:pid',async(req,res) => {
 
 })
 
-productRoutes.put('/:id', uploader.single('thumbnail'),async(req,res) => {
-    const productId = parseInt(req.params.id);
+productRoutes.put('/:pid', uploader.single('thumbnail'),async(req,res) => {
+    const productId = req.params.pid;
     const update = req.body
     update.id = productId
-    await manager.updateProduct(update)
-    res.status(200).send({ status: 5, payload: update})
+    // await manager.updateProduct(update)
+    // res.status(200).send({ status: 5, payload: update})
+
+    const updateProductsFromDb = await dbManager.updateProductDB(update)
+    res.status(200).send({ status: 5, payload: updateProductsFromDb})
 
 })
 
